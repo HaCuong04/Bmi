@@ -14,14 +14,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import fi.oamk.bmi.ui.theme.BmiTheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
+import fi.oamk.bmi.ui.theme.BmiTheme
+import androidx.compose.material3.MaterialTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,50 +45,44 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Bmi(modifier: Modifier = Modifier) {
-    var heightInput: String by remember { mutableStateOf("") }
-    var weightInput: String by remember { mutableStateOf("") }
+    var heightInput by remember { mutableStateOf("") }
+    var weightInput by remember { mutableStateOf("") }
     val height = heightInput.toFloatOrNull() ?: 0.0f
-    val weight = weightInput.toIntOrNull() ?: 0
+    val weight = weightInput.toFloatOrNull() ?: 0.0f
     val formatter = DecimalFormat("0.00")
     val bmi = if (weight > 0 && height > 0) formatter.format(weight / (height * height)) else 0.0f
 
-    Column {
-        text (
+    Column(modifier = modifier.padding(16.dp)) {
+        Text(
             text = "Body mass index",
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
         )
         OutlinedTextField(
             value = heightInput,
-            onValueChange = {heightInput = it.replace(',','.')},
-            label = {Text("Height")},
+            onValueChange = { heightInput = it.replace(',', '.') },
+            label = { Text("Height") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp)
+                keyboardType = KeyboardType.Number
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp)
         )
         OutlinedTextField(
             value = weightInput,
-            onValueChange = {weightInput = it.replace(',','.')},
-            label = {Text("Weight")},
+            onValueChange = { weightInput = it.replace(',', '.') },
+            label = { Text("Weight") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp)
+                keyboardType = KeyboardType.Number
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp)
         )
         Text(
-            text = context.getString(R.string.body_mass_index) + bmi,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 16.dp)
+            text = "BMI: $bmi",
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp)
         )
     }
 }
